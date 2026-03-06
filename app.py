@@ -2,6 +2,7 @@ from flask import Flask
 from controller.toggle_theme import theme_bp
 from controller import register_routes
 from models.db import db
+from models.category import Category
 import secrets
 import os
 from dotenv import load_dotenv
@@ -23,9 +24,17 @@ if not app.config["SQLALCHEMY_DATABASE_URI"]:
 
 db.init_app(app)
 
+default_categories = ["Eletrônicos", "Roupas", "Móveis", "Livros", "Jogos"]
+
 with app.app_context():
     db.create_all()
-
+    # Verifica e cria cada categoria se não existir
+    for cat_name in default_categories:
+        exists = Category.query.filter_by(name=cat_name).first()
+        if not exists:
+            new_cat = Category(name=cat_name)
+            db.session.add(new_cat)
+    db.session.commit()
 
 register_routes(app)
 login_required(app)
