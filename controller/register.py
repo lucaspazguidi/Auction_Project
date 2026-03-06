@@ -1,7 +1,7 @@
 from flask import request, Blueprint, render_template, jsonify, session
 from models.db import db
+from models.user import User
 from utils.hash import hash_password
-from sqlalchemy import text
 from utils.validations.validate_username import validate_username
 from utils.validations.valid_email import valid_email
 
@@ -23,7 +23,6 @@ def register():
     password = data.get("password")
     confirm = data.get("confirm")
 
-    
     # The fields must be equal
     if password != confirm:
         return jsonify({
@@ -48,19 +47,20 @@ def register():
             "message": "Insira um email válido!"
         }), 400
 
-    # Tranform de password into a hash
+    # Transform password into a hash
     h_password = hash_password(password)
 
     try:
-        # Calling db procedure that create a new user
-        result = db.session.execute(
-            text("CALL register_user(:name, :email, :password, :cel)"),
-            {"name": name, "email": email, "password": h_password, "cel": cel}
+        new_user = User(
+            name=name,
+            email=email,
+            password=h_password,
+            cel=cel
         )
 
+        db.session.add(new_user)
         db.session.commit()
 
-    # Except some error
     except Exception as e:
         print("Erro no banco →", e)
         return jsonify({
@@ -69,11 +69,8 @@ def register():
             "message": "Erro ao criar conta. Tente outro nome ou email."
         }), 500
 
-
     # The new user was created, now redirect for login route
     return jsonify({
         "success": True,
-        "redirect": "/login" 
+        "redirect": "/login"
     })
-
-
