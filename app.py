@@ -16,8 +16,10 @@ app = Flask(__name__)
 
 app.secret_key = os.getenv("SECRET_KEY", secrets.token_hex(32))
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLALCHEMY_DATABASE_URI")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+if not app.config["SQLALCHEMY_DATABASE_URI"]:
+    raise RuntimeError("DATABASE URL não configurada.")
 
 db.init_app(app)
 
