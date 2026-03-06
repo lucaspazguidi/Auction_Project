@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Entrar{% endblock %}
+
+{% block content %}
+<style>
+    /* Basic style to position the icon inside the password field */
+    .password-container {
+        position: relative; /* Defines the positioning context */
+        margin-bottom: 15px; /* Adds some space below */
+    }
+
+    .password-container input {
+        padding-right: 40px; /* Ensures space for the button in the input */
+        width: 100%;
+        box-sizing: border-box; /* Includes padding and border in width/height */
+    }
+
+    .toggle-password {
+        position: absolute;
+        top: 50%; /* Vertically centers */
+        right: 10px; /* Distance from the right edge */
+        transform: translateY(-50%); /* Fine-tuning vertical centering */
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding-right: 10px;
+        font-size: 1.5em;
+        color: var(--secundary); /* Icon color */
+        outline: none; /* Removes the outline on click */
+    }
+    .muted{
+        color: var(--secundary);
+    }
+    form{
+        margin: auto;
+    }
+    h1{
+        text-align: center;
+    }
+</style>
+
+<form action="/login" method="POST" class="form card"
+    style="padding:18px;max-width:480px">
+    <h1>Entrar</h1>
+
+    <label>Email ou Nome de Usuário</label>
+    <input type="text" name="user-email"
+        placeholder="Digite seu email ou nome de usuário" required>
+    
+    <label>Senha</label>
+    
+    <div class="password-container">
+        <input type="password" name="password" id="login-password" 
+            placeholder="Digite sua senha" required>
+        <button type="button" id="toggle-login-pass" class="toggle-password">👁</button>
+    </div>
+    
+    <button class="btn" type="submit">Entrar</button>
+    
+    {% if message %}
+    <h3>{{ message }}</h3>
+    {% endif %}
+    
+    <p class="muted">Não tem conta? <a
+            href="{{ url_for('register.register')}}">Crie agora</a></p>
+</form>
+
+<script src="static/js/login.js"></script> 
+
+{% endblock %}

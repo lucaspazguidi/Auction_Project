@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Leilões{% endblock %}
+
+{% block content %}
+<h1>Leilões</h1>
+
+<form class="searchbar" action="/auctions">
+
+  <div class="search-input-row">
+    <input type="search" placeholder="Buscar leilões">
+    <button type="submit" class="btn">Buscar</button>
+  </div>
+
+  <div class="filters" style="margin:12px 0">
+
+    <select id="category" name="category" class="category-select">
+      <option value="">Todas as categorias</option>
+      {% for c in categories %}
+        <option value="{{ c.category_id }}" 
+          {% if request.args.get("category") == c.category_id|string %}selected{% endif %}>
+          {{ c.name }}
+        </option>
+
+      {% endfor %}
+    </select>
+
+    <label class="badge selectable">
+      <input type="radio" name="situation" value="all" hidden
+        {% if request.args.get("situation") == 'all' %}checked{% endif %}>
+      Todos
+    </label>
+
+    <label class="badge selectable">
+
+      <input type="radio" name="situation" value="active" hidden
+        {% if request.args.get("situation") == 'active' %}checked{% endif %}>
+
+      Em andamento
+    </label>
+
+    <label class="badge selectable">
+
+      <input type="radio" name="situation" value="scheduled" hidden
+        {% if request.args.get("situation") == 'scheduled' %}checked{% endif %}>
+
+      Futuros
+    </label>
+
+    <label class="badge selectable">
+
+      <input type="radio" name="situation" value="arremat" hidden
+      {% if request.args.get("situation") == 'arremat' %}checked{% endif %}>
+      Arrematados
+    </label>
+
+    <label class="badge selectable">
+
+      <input type="radio" name="situation" value="finished" hidden
+      {% if request.args.get("situation") == 'finished' %}checked{% endif %}>
+      Finalizados
+    </label>
+  </div>
+</form> 
+
+<section class="grid cards">
+  {% for a in auctions.items %}
+  <article class="card">
+    <!-- Wrapper para imagem do card -->
+    <div class="auction-card-img-wrapper">
+      <a href="{{ url_for('auction.auction', id=a.auction_id) }}">
+        <img src="{{ a.item.url_image }}" class="auction-card-img">
+      </a>
+    </div>
+    <div class="content">
+      <span class="badge">{{ a.item.category.name }}</span>
+      {% if a.situation == 'active' %}
+        <h3><a href="{{ url_for('auction.auction', id = a.auction_id) }}">{{ a.item.name }}</a></h3>
+        <div class="price">Comprar Agora: <br> R${{ a.buy_now }}</div>
+        <div class="countdown-timer" data-end-date="{{ a.end_date }}">Termina em <span id="timer-{{ a.auction_id }}">Calculando...</span></div>
+        <h3 style="color: green;">Aberto</h3>
+      {% elif a.situation == "scheduled" %}
+        <h3><a href="#">{{ a.item.name }}</a></h3>
+        <div class="price">R${{ a.buy_now }}</div>
+        <div class="countdown">Começa em {{ a.start_date }}</div>
+        <h3 style="color: red;">Fechado</h3>
+      {% elif a.situation == 'finished' %}
+      <h3><a href="{{ url_for('auction.auction', id = a.auction_id) }}">{{ a.item.name }}</a></h3>
+        <div class="price">R${{ a.buy_now }}</div>
+        <h3 style="color: rgb(216, 39, 39);">Finalizado</h3>
+      {% elif a.situation == 'arremat' %}
+        <h3><a href="{{ url_for('auction.auction', id = a.auction_id) }}">{{ a.item.name }}</a></h3>
+        <div class="price">Comprado por: R${{ a.buy_now }}</div>
+        <div class="countdown">Terminou em {{ a.start_date }}</div>
+        <h3 style="color: rgb(216, 39, 39);">Arrematado</h3>
+      {% endif %}
+    </div>
+  </article>
+  {% endfor %}
+
+</section>
+<div>
+    {% if auctions.has_prev %}
+      {% set situ = request.args.get('situation') or ''%}
+      {% set categ = request.args.get('category') or '' %}
+      <a href="/auctions?category={{ categ}}&situation={{ situ }}&page={{ auctions.prev_num }}">{{ auctions.prev_num }}</a>
+    {% endif %}
+
+    {% if auctions.has_next %}
+      {% set situ = request.args.get('situation') or ''%}
+      {% set categ = request.args.get('category') or '' %}
+      <a href="/auctions?category={{ categ }}&situation={{ situ }}&page={{ auctions.next_num }}">{{ auctions.next_num }}</a>
+    {% endif %}
+
+    <span>Página {{ auctions.page }} de {{ auctions.pages }}</span>
+
+  </div>
+
+<script src="{{ url_for('static', filename='js/filters.js') }}"></script>
+<script src="{{ url_for('static', filename='js/auction_timer.js') }}"></script>
+
+<style>
+.countdown-timer {
+    list-style: none;
+    padding-left: 0;
+    margin: 5px 0;
+    font-weight: bold;
+    color: var(--text);
+}
+</style>
+
+{% endblock %}

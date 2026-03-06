@@ -1,0 +1,75 @@
+/* General layout to better organize inputs and spacing */
+.recharge-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Grouping of fixed value buttons */
+.amount-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Better organization of recharge options */
+.amount-option {
+  display: flex;
+  align-items: center;
+}
+
+.amount-option input[type="radio"] {
+  opacity: 0;
+  position: fixed;
+  width: 0;
+}
+
+.amount-btn {
+  width: 100%;
+  text-align: center;
+  padding: 12px;
+  border: 2px solid var(--muted);
+  color: var(--text);
+  background-color: var(--bg);
+  transition: all 0.2s ease-in-out;
+  box-shadow: none;
+}
+
+.amount-option input[type="radio"]:checked + .amount-btn {
+  border-color: var(--brand-green);
+  color: #000;
+  background-color: var(--brand-green);
+  box-shadow: 0 4px 8px rgba(41, 77, 72, 0.4);
+}
+
+/* Organized custom value field */
+#custom-amount-field {
+  margin-top: 12px;
+  display: none;
+}
+
+#custom-amount-field input {
+  width: 150px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* User-friendly page layout */
+.balance-page-layout {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
+  text-align: center;
+}
+
+.balance-info {
+  width: min(500px, 90%);
+  border: 2px solid var(--brand-gold);
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(180, 159, 99, 0.2);
+  margin-bottom: 20px;
+  margin-top: 5vh;
+}

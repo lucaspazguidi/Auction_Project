@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}FAQ - Vendu{% endblock %}
+
+{% block content %}
+<h1>Perguntas Frequentes (FAQ)</h1>
+<p>Encontre respostas rápidas para as dúvidas mais comuns sobre como comprar,
+  vender e utilizar a plataforma Vendu.</p>
+
+<section class="grid">
+
+  <details class="card">
+    <summary class="content"><strong>Como funciona um leilão na
+        Vendu?</strong></summary>
+    <div class="content">
+      <p>
+        Os usuários dão lances de forma incremental no item desejado até o prazo
+        final
+        estabelecido. O leilão se encerra no horário programado, e o usuário que
+        tiver
+        o **maior lance** no momento do encerramento é o vencedor e está
+        contratualmente obrigado a adquirir o item.
+      </p>
+    </div>
+  </details>
+
+  <details class="card">
+    <summary class="content"><strong>Como faço o pagamento após vencer um
+        leilão?</strong></summary>
+    <div class="content">
+      <p>
+        Ao vencer um leilão, você será notificado.
+        Você
+        deverá finalizar o pagamento no *checkout* da plataforma, incluindo o
+        valor
+        do lance vencedor, o prêmio do leiloeiro (se aplicável), frete e
+        impostos,
+        conforme detalhado na página do lote. Utilizamos serviços de pagamento
+        seguros de terceiros.
+      </p>
+    </div>
+  </details>
+
+  <details class="card">
+    <summary class="content"><strong>A Vendu é uma plataforma
+        segura?</strong></summary>
+    <div class="content">
+      <p>
+        Sim. Implementamos diversas medidas de segurança, incluindo a
+        verificação
+        de contas, proteção de dados (conforme nossa Política de Privacidade) e
+        um
+        sistema de mediação de disputas para resolver problemas entre comprador
+        e
+        vendedor, garantindo um ambiente de negociação confiável.
+      </p>
+    </div>
+  </details>
+
+  <details class="card">
+    <summary class="content"><strong>Posso cancelar um lance que fiz por
+        engano?</strong></summary>
+    <div class="content">
+      <p>
+        Conforme nossos Termos de Uso, todos os lances são **vinculativos** e
+        constituem um compromisso de compra. Lances não podem ser retirados ou
+        cancelados, exceto em circunstâncias excepcionais e mediante aprovação
+        expressa da administração da Plataforma.
+      </p>
+    </div>
+  </details>
+
+  <details class="card">
+    <summary class="content"><strong>Posso devolver um item se me arrepender da
+        compra?</strong></summary>
+    <div class="content">
+      <p>
+        A política de devolução (Arrependimento) é regida pelo Código de Defesa
+        do
+        Consumidor para compras online, com prazo de 7 dias após o recebimento.
+        Contudo, devido à natureza dos leilões (itens frequentemente vendidos
+        *no
+        estado em que se encontram*), a devolução é limitada. Consulte nossa
+        **Política de Devolução** para detalhes sobre os casos de arrependimento
+        e divergência material.
+      </p>
+    </div>
+  </details>
+
+  <details class="card">
+    <summary class="content"><strong>Existem taxas para comprar na
+        Vendu?</strong></summary>
+    <div class="content">
+      <p>
+        Sim. Além do valor do lance vencedor, o Comprador pode ser responsável
+        pelo pagamento do **Prêmio do Leiloeiro** (comissão), custos de frete
+        e impostos aplicáveis. Todas essas taxas são claramente detalhadas na
+        página do leilão e no *checkout* antes da confirmação do pagamento.
+      </p>
+    </div>
+  </details>
+
+</section>
+{% endblock %}

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description"
+            content="Plataforma de leilões online com transparência e segurança.">
+
+        <title>{% block title %}Início{% endblock %} • Vendu</title>
+
+        {% block css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}" defer>{% endblock %}
+
+        {% block head_extra %}{% endblock %}
+    </head>
+    <body class="{% if session.get('theme') == 'dark' %}theme-dark{% endif %}">
+
+        <header class="site-header">
+            <div class="container header-inner">
+
+                <a class="logo" href="{{ url_for('home.home') }}"
+                    aria-label="Página inicial Vendu">Vendu</a>
+
+                <nav class="nav main-nav" aria-label="Menu principal">
+                    <a href="{{ url_for('list_auctions.list_auctions')}}">Leilões</a>
+                    <a href="{{ url_for('categories.categories')}}">Categorias</a>
+                    <a href="{{ url_for('page.page', page='promotions')}}">Promoções</a>
+                    <a href="{{ url_for('page.page', page='faq')}}">Ajuda</a>
+                    <a href="{{ url_for('page.page', page='contact')}}">Contato</a>
+                    <a href="{{ url_for('item.item') }}">Cadastrar Item</a>
+                    <a href="{{ url_for('sell.sell') }}">Criar Leilão</a>
+                </nav>
+
+                <div class="header-actions">
+                    {% if session.get("logged") %}
+                    <a class="btn ghost"
+                        href="{{ url_for('logout.logout') }}">Sair</a>
+                    {% else %}
+                    <a class="btn ghost"
+                        href="{{ url_for('login.login') }}">Entrar</a>
+                    <a class="btn"
+                        href="{{ url_for('register.register') }}">Criar
+                        conta</a>
+                    {% endif %}
+
+                    <form method="POST"
+                        action="{{ url_for('theme.toggle_theme') }}"
+                        style="display: inline;">
+                        <button type="submit" class="icon-link"
+                            aria-label="Alternar tema claro/escuro"
+                            title="Trocar Tema">
+                            {% if session.get('theme') == 'dark' %} ☀️ {% else %} 🌙 {% endif %}
+                        </button>
+                    </form>
+
+                    <a class="icon-link" href="{{ url_for('perfil.perfil')}}"
+                        aria-label="Perfil do usuário" title="Dashboard">👤</a>
+                </div>
+                
+                <nav class="nav mobile-nav" role="navigation" aria-label="Menu de navegação secundário">
+                    <div class="dropdown">
+                        <button class="dropdown-toggle" aria-expanded="false">
+                            Menu ☰
+                        </button>
+
+                        <div class="dropdown-menu">
+
+                            <a href="{{ url_for('list_auctions.list_auctions') }}">Leilões</a>
+                            <a href="{{ url_for('categories.categories') }}">Categorias</a>
+                            <a href="{{ url_for('page.page', page='promotions') }}">Promoções</a>
+                            <a href="{{ url_for('page.page', page='faq') }}">FAQ</a>
+                            <a href="{{ url_for('page.page', page='contact') }}">Contato</a>
+                            <a href="{{ url_for('item.item') }}">Cadastrar Item</a>
+                            <a href="{{ url_for('sell.sell') }}">Criar Leilão</a>
+                            
+                            <hr style="margin: 10px 0; border-color: currentColor;">
+                            {% if session.get("logged") %}
+                            <a href="{{ url_for('perfil.perfil') }}">Meu Perfil 👤</a>
+                            <a href="{{ url_for('logout.logout') }}">Sair</a>
+                            <a href="{{ url_for('items.items')}}">Meus Items</a>
+                            <a href="{{ url_for('balance.balance') }}">Recarregar Saldo</a>
+                            {% else %}
+                            <a href="{{ url_for('login.login') }}">Entrar</a>
+                            <a href="{{ url_for('register.register') }}">Criar Conta</a>
+
+                            {% endif %}
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <main class="container page" role="main">
+            {% block content %}{% endblock %}
+        </main>
+        <footer class="site-footer" role="contentinfo">
+            <div class="container footer-grid">
+                <div>
+                    <h4>Vendu</h4>
+                    <p>Transparência e segurança em cada lance.</p>
+                </div>
+
+                <nav aria-label="Links institucionais">
+                    <h4>Institucional</h4>
+                    <ul>
+                        <li><a
+                                href="{{ url_for('page.page', page='about') }}">Sobre
+                                nós</a></li>
+                        <li><a
+                                href="{{ url_for('page.page', page='terms') }}">Termos
+                                de uso</a></li>
+                        <li><a
+                                href="{{ url_for('page.page', page='privacy') }}">Privacidade</a></li>
+                        <li><a
+                                href="{{ url_for('page.page', page='returns') }}">Devoluções</a></li>
+                    </ul>
+                </nav>
+
+                <nav aria-label="Links de atendimento">
+                    <h4>Atendimento</h4>
+                    <ul>
+                        <li><a
+                                href="{{ url_for('page.page', page='faq') }}">FAQ</a></li>
+                        <li><a
+                                href="{{ url_for('page.page', page='contact') }}">Fale
+                                conosco</a></li>
+                        <li><a
+                                href="{{ url_for('page.page', page='promotions') }}">Promoções</a></li>
+                    </ul>
+                </nav>
+
+                <div>
+                    <h4>Receba novidades</h4>
+                    <form class="inline-form" method="POST" action="/subscribe"
+                        aria-label="Formulário de newsletter">
+                        <input type="email" placeholder="exemplo@email.com"
+                            aria-label="Digite seu email" required>
+                        <button class="btn" type="submit">Assinar</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="container footer-bottom">
+                <small>&copy; 2025 Vendu. Todos os direitos reservados.</small>
+            </div>
+        </footer>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const dropdown = document.querySelector(".dropdown");
+                const toggle = document.querySelector(".dropdown-toggle");
+
+                toggle.addEventListener("click", () => {
+                    dropdown.classList.toggle("open");
+                    const isOpen = dropdown.classList.contains("open");
+                    toggle.setAttribute("aria-expanded", isOpen.toString());
+                });
+
+                document.addEventListener("click", (e) => {
+                    if (dropdown && !dropdown.contains(e.target)) {
+                        dropdown.classList.remove("open");
+                        toggle.setAttribute("aria-expanded", "false");
+                    }
+                });
+            });
+        </script>
+
+    </body>
+</html>

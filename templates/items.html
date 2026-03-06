@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Itens Cadastrados{% endblock %}
+
+{% block content %}
+<h1>Itens Cadastrados</h1>
+<p class="muted">Gerencie e visualize todos os itens que você preparou para
+    leilão.</p>
+
+<form class="searchbar" action="/items">
+    <div class="search-input-row">
+        <input type="search" placeholder="Buscar itens por nome ou descrição">
+        <button class="btn" type="submit">Buscar</button>
+    </div>
+
+    <div class="filters" style="margin:12px 0">
+        <label class="badge selectable"><input type="radio" name="situation"
+                value="all" hidden>Todos</label>
+        <label class="badge selectable"><input type="radio" name="situation"
+                value="draft" hidden>Itens em Rascunho</label>
+        <label class="badge selectable"><input type="radio" name="situation"
+                value="auction" hidden>Itens Leiloados</label>
+    </div>
+</form>
+
+<div style="margin: 25px 0 25px 0;">
+    <a href="{{ url_for('item.item') }}" class="btn">
+        + Cadastrar Novo Item
+    </a>
+</div>
+
+<section class="grid cards">
+
+    {% for i in my_items %}
+    <article class="card">
+        <div class="cover">
+            <img src="{{ i.url_image }}"
+                alt="Item Image"
+                style="display: block; width: 100%; height: auto;">
+        </div>
+        <div class="content">
+            <span class="badge"
+                style="background: var(--bg); color: rgb(0, 0, 0);">{{
+                i.category.name }}</span>
+            <h3><a href="/item_info/{{ i.item_id }}">{{ i.name }}</a></h3>
+            <div class="item-description">{{ i.description }}</div>
+        </div>
+    </article>
+    {% endfor %}
+</section>
+
+<script src="{{ url_for('static', filename='js/filters.js') }}"></script>
+<style>
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--card);
+    display: flex;
+    flex-direction: column;
+}
+
+.card .cover {
+    width: 100%;
+    height: 200px; 
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+}
+
+.card .cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    display: block;
+}
+
+.card .content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card .content h3 {
+    margin: 0;
+    font-size: 1.1em;
+}
+
+
+.card .content .item-description {
+    font-size: 0.9em;
+    color: #555;
+}
+
+</style>
+{% endblock %}

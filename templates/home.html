@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Início{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="card panel">
+    <div class="content">
+      <h1>Arremate com segurança.</h1>
+      <p>Milhares de itens em leilão agora mesmo. Encontre o próximo ótimo
+        negócio.</p>
+      <form class="searchbar" action="/auctions">
+        <div class="search-input-row">
+          <input type="search"
+            placeholder="Buscar por produto, marca ou categoria">
+          <button class="btn">Buscar</button>
+        </div>
+
+        <div class="filters" style="margin-top:10px">
+          {% for c in categories %}
+            <label class="badge selectable"><input type="radio" name="category"
+              value="{{ c.category_id }}" hidden>{{ c.name }}</label>
+          {% endfor %}
+          
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="card panel">
+    <div class="content">
+      <h3>Resumo ao vivo</h3>
+      <div class="kpis">
+        <div class="kpi"><div class="muted">Leilões ativos</div><div
+            class="price">{{ active_auctions }}</div></div>
+        <div class="kpi"><div class="muted">Lances hoje</div><div
+            class="price">{{ bids_today }}</div></div>
+        <div class="kpi"><div class="muted">Novos leilões</div><div
+            class="price">{{ auctions_today }}</div></div>
+        <div class="kpi"><div class="muted">Maior Lance hoje</div><div
+            class="price">R$ {{ value if value else 0 }}</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<h2 style="margin-top:24px">Leilões em destaque</h2>
+<section class="grid cards">
+  {% for a in highlights %}
+  <article class="card">
+    <div class="cover card-img-wrapper"><a href="{{ url_for('auction.auction', id = a.auction_id) }}"><img src="{{ a.item.url_image }}" class="card-img"></a></div>
+    <div class="content">
+      <span class="badge">{{ a.item.category.name }}</span>
+      <h3><a href="{{ url_for('auction.auction', id = a.auction_id) }}">{{ a.item.name }}</a></h3>
+      <div class="price">Comprar agora: <br>R${{ a.buy_now }}</div>
+      <br>
+      <div class="countdown-timer" data-end-date="{{ a.end_date }}">Termina em <span id="timer-{{ a.auction_id }}">Calculando...</span></div>
+      <h3 style="color: green;">Aberto</h3>
+    </div>
+  </article>
+  {% endfor %}
+</section>
+<style>
+.countdown-timer {
+    list-style: none;
+    padding-left: 0;
+    margin: 5px 0;
+    font-weight: bold;
+    color: var(--text);
+}
+</style>
+<script src="{{ url_for('static', filename='js/filters.js') }}"></script>
+<script src="{{ url_for('static', filename='js/auction_timer.js') }}"></script>
+
+{% endblock %}

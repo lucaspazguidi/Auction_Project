@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Adicionar Saldo{% endblock %}
+
+{% block css %}
+{{  super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/balance.css') }}">
+{% endblock %}
+
+{% block content %}
+{% if cpf %}
+<div style="display: flex; flex-direction: column; align-items: center">
+    <div class="card" style="max-width: 50vw; width: 100%;">
+        <div class="content">
+            <h2 style="margin-top: 0;">Seu Saldo Atual</h2>
+            <p class="muted">Saldo disponível para lances e compras.</p>
+            <div class="price"
+                style="font-size: 2.5rem">
+                R$ {{ balance if balance else '0,00' }}
+            </div>
+            <strong><p class="muted" style="margin-top: 5px;">Última Transação Recarga : {{
+                last_transaction.transaction_date }} <br>Valor: {{ last_transaction.value }}</p></strong>
+        </div>
+    </div> 
+
+    <div class="card"
+        style="max-width: 50vw; margin-top: 15px; width: 100%;">
+        <div class="content">
+            <h2 style="color: var(--brand-gold); margin-top: 0;">Adicionar
+                Saldo</h2>
+            <p class="muted">Selecione o valor que deseja recarregar para
+                continuar dando lances.</p>
+
+                <form class="form"
+                    action="/recharge"
+                    method="POST">
+
+                <label style="font-weight: bold">Escolha o
+                    Valor de Recarga:</label>
+                <div class="grid"
+                    style="grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;">
+
+                    {% set amounts = [50, 100, 200] %}
+                    {% for amount in amounts %}
+                    <label class="amount-option selectable">
+                        <input type="radio" name="recharge_amount"
+                            value="{{ amount }}.00" hidden>
+                        <span class="btn ghost amount-btn">R$ {{ amount
+                            }},00</span>
+                    </label>
+                    {% endfor %}
+
+                    <label class="amount-option selectable">
+                        <input type="radio" name="recharge_amount"
+                            value="custom" id="custom-radio" hidden>
+                        <span class="btn ghost amount-btn">Outro Valor</span>
+                    </label>
+                </div>
+
+                <div id="custom-amount-field"
+                    style="display:none; margin-top: 10px;">
+                    <label for="custom_amount">Valor Personalizado</label>
+                    <input type="number" step="5" min="10"
+                        name="custom_amount" id="custom_amount"
+                        placeholder="Insira um valor (mín. R$ 10,00)"
+                        style="width: 50%">
+                </div>
+
+                <button type="submit" class="btn"
+                    style="padding: 15px; font-size: 1.1rem; margin-top: 25px">
+                    Confirmar Recarga
+                </button>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="balance-page-layout">
+    <div class="card balance-info">
+        <div class="content">
+            <h2 style="margin-top: 0;">Você precisa concluir o cadastro para
+                efetuar recarregas de saldo</h2>
+            <a href="{{ url_for('perfil_info.perfil_info') }}">Conclua seu Cadastro</a>
+            <div class="price"
+                style="font-size: 2.5rem; color: var(--brand-green);">
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+    <script src="{{ url_for('static', filename='js/balance.js') }}"></script>
+
+    {% endblock %}

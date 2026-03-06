@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Contato{% endblock %}
+
+{% block content %}
+<h1>Fale conosco</h1>
+<form class="form card" style="padding:18px;max-width:720px">
+  <label>Nome</label>
+  <input style="max-width: 50%;" type="text" placeholder="Seu nome completo">
+  <label>Email</label>
+  <input style="max-width: 50%;" type="email" placeholder="exemplo@email.com">
+  <label>Assunto</label>
+  <input style="max-width: 50%;" type="text" placeholder="Assunto da mensagem">
+  <label>Mensagem</label>
+  <textarea rows="6" style="max-width: 50%;"></textarea>
+  <button class="btn" type="submit" style="margin-top: 1rem; max-width: 55%">Enviar</button>
+</form>
+{% endblock %}

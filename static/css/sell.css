@@ -1,0 +1,119 @@
+.sell-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 630px;
+    margin: auto;
+    padding: 24px;
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid rgba(0, 0, 0, 0.486);
+    box-shadow: var(--shadow);
+    transition: background 0.5s, color 0.25s, border-color 0.25s;
+}
+
+/* Titles */
+.sell-form h2,
+.sell-form h3 {
+    color: var(--secondary);
+}
+h1 {
+    text-align: center;
+    color: var(--secondary);
+}
+
+/* Labels */
+.sell-form label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    color: var(--secondary);
+    gap: 6px;
+}
+
+/* Inputs, Select, Textarea - SCOPE .sell-form */
+.sell-form input,
+.sell-form select,
+.sell-form textarea {
+    padding: 10px 12px;
+    border: 1px solid rgba(0, 0, 0, 0.432);
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 1rem;
+    width: 50%;
+    transition: 0.25s;
+}
+
+.sell-form input:focus,
+.sell-form select:focus,
+.sell-form textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.3);
+    outline: none;
+}
+
+/* Smaller fields */
+.small-field {
+    max-width: 180px;
+}
+
+/* Flexible grid (Only within sell-form) */
+.sell-form .row-2 { 
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Image */
+#item_image {
+    width: 280px;
+    height: 280px;
+    object-fit: cover; 
+    border-radius: 5px;
+    display: none; 
+}
+
+/* Image wrapper */
+.image-wrapper {
+    display: flex;
+    justify-content: flex-start; /* The internal content (the image) stays aligned to the left */
+    width: 100%;
+    max-width: 280px;
+    margin: 0; /* Ensures the 280px container is aligned to the left inside the form */
+}
+/* Button */
+.sell-form .submit-btn {
+    width: 50%;
+    margin: 25px auto 10px auto;
+    padding: 15px;
+    font-size: 1.15rem;
+    border-radius: var(--radius);
+    background: var(--secondary);
+    color: var(--card);
+    font-weight: 700;
+    transition: 0.25s;
+    border: none;
+}
+
+.sell-form .submit-btn:hover {
+    filter: brightness(1.1);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .sell-form .row-2 { /* SCOPE */
+        grid-template-columns: 1fr;
+    }
+    
+    .sell-form {
+        max-width: 100%;
+        padding: 16px;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .sell-form .submit-btn {
+        width: 70%;
+    }
+}

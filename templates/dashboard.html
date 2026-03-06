@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1>Minha conta</h1>
+
+<h2>{{ name }} <br> {{ email }}</h2>
+
+<section class="kpis" style="margin-bottom:12px">
+
+  <div class="kpi">
+        <div class="muted">Configurações</div>
+        <div class="price">
+            <a href="{{ url_for('perfil_info.perfil_info') }}" style="color: inherit; text-decoration: none;">Dados Pessoais</a>
+        </div>
+
+    </div>
+  
+  </div>
+  <div class="kpi"><div class="muted">Lances ativos</div><div class="price">{{
+      active_bids }}</div></div>
+  <div class="kpi"><div class="muted">Itens cadastrados</div><div
+      class="price"><a href="{{ url_for('items.items') }}">{{ itens
+        }}</a></div></div>
+  <div class="kpi"
+    style="display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;">
+    <div>
+      <div class="muted">Saldo</div>
+
+      <div class="price"><a href="{{ url_for('balance.balance') }}">R${{
+          balance if balance is not none else "0" }}</a></div>
+
+    </div>
+
+  </div>
+</section>
+
+<div class="grid" style="grid-template-columns:1fr 1fr">
+
+  <section class="card">
+    <div class="content">
+      <h3>Meus lances</h3>
+      <div class="list-container">
+
+        <div class="list-header">
+          <div>Item</div>
+          <div>Valor</div>
+          <div>Status</div>
+        </div>
+
+        <div class="list-scroll">
+          {% for b in bids %}
+          {% set bid_obj = bids[b][0] %}
+          {% set situation = bids[b][1] %}
+          <div class="list-item">
+            <div><a
+                href="{{ url_for('auction.auction', id=bid_obj.auction_id) }}">{{
+                bid_obj.auction.item.name }}</a></div>
+            <div>R${{ bid_obj.value }}</div>
+            <div><span class="badge">{{ situation }}</span></div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="content">
+        <h3>Histórico de Transações</h3>
+        <div class="list-container">
+
+          <div class="list-header">
+            <div>Valor</div>
+            <div>Tipo</div>
+            <div>Data</div>
+          </div>
+
+          <div class="list-scroll">
+            {% for t in transactions %}
+            <div class="list-item">
+              <div>R${{ t.value }}</div>
+              <div>{{ t.type }}</div>
+              <div>{{ t.transaction_date }}</div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/masks.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/cep_api.js') }}"></script>
+
+    {% endblock %}

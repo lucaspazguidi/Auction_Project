@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Erro 404 - Página Não Encontrada{% endblock %}
+
+{% block css %}
+{{  super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/404.css') }}">
+{% endblock %}
+
+
+{% block content %}
+<div class="container" style="display: flex; justify-content: center; align-items: center; min-height: 70vh;">
+    <section class="card" style="padding: 40px; max-width: 700px; width: 100%;">
+        
+        <div class="error-wrapper">
+            
+            <img class="error-image"
+                 src="{{ url_for('static', filename='images/404.png') }}" 
+                 alt="Erro 404: Página não encontrada">
+
+            <div class="error-text">
+                <h1>404</h1>
+                <h2>Página Não Encontrada</h2>
+                
+                <p class="muted">
+                    Ops! Não conseguimos encontrar o que você estava procurando. 
+                    Talvez o endereço esteja incorreto, ou a página tenha sido removida.
+                </p>
+
+                <div class="buttons">
+                    <a href="/" class="btn">Página Inicial</a>
+                    <a href="javascript:history.back()" class="btn ghost">Voltar</a>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+</div>
+
+{% endblock %}

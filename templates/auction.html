@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Detalhes do Leilão{% endblock %}
+
+{% block content %}
+<article class="grid" style="grid-template-columns:1.2fr .8fr">
+  <section class="card">
+    <div class="cover auction-img-wrapper">  
+      <img src="/{{ image }}" alt="Auction Image" class="auction-img" />  
+    </div>
+
+    <div class="content">
+      <h1>{{ auction.item.name }}</h1>
+      <h3>Descrição</h3>
+      <p>{{ auction.item.description }}</p>
+  
+      </div>
+    </div>
+  </section>
+  <aside class="card">
+    {% if auction.situation == 'active' %}
+    <div class="content">
+
+      <div class="countdown-timer" data-end-date="{{ auction.end_date }}">Termina em <span id="timer-{{ auction.auction_id }}">Calculando...</span></div>
+
+      {% if current_bid %}
+      <div class="price">Lance atual: R${{ current_bid }}</div>
+      {% else %}
+      <div class="price" style="margin-top: 10px;">Sem lances</div>
+      {% endif %}
+      <form class="form"
+        action="{{ url_for('bid.bid', auction_id = auction.auction_id ) }}"
+        style="margin-top:12px" method="POST">
+        <label>Seu lance
+          <input name="value" type="number" step="{{ auction.min_bid }}"
+            min="{{ auction.starting_price }}" placeholder="R$" required>
+            {% if current_bid %}
+            <h4>Lance mínimo: R${{ current_bid + auction.min_bid }}
+            <br> Incremento de: R${{ auction.min_bid }}</h4>
+            {% else %}
+            <h4>Preço Inicial R${{ auction.starting_price }}
+            <br> Incremento de: R${{ auction.min_bid }}</h4>
+            {% endif %}
+        </label>
+        {% if session.get("logged") %}
+        {% if messages %}
+        {{ messages[0] }}
+        <a href="{{ url_for('balance.balance') }}"
+          style="font-weight: 700; font-size: clamp(0.9rem, 2.5vw, 1rem);">Recarregar
+          Saldo</a>
+        {% endif %}
+        <button class="btn" type="submit">Dar lance</button>
+        {% else %}
+        <a class="btn-a" href="{{ url_for('login.login') }}">Você precisa estar logado para dar
+          lances</a>
+        {% endif %}
+        <button class="btn ghost" type="button">Adicionar à lista</button>
+      </form>
+      <hr style="margin: 16px 0; opacity: .3;">
+      <h4 style="margin-top:16px">Histórico de lances</h4>
+      <table class="table">
+        <thead><tr><th>Usuário</th><th>Valor</th><th>Data</th></tr></thead>
+        <tbody>
+          {% for b in bids %}
+          <tr><td>{{ b.user.name }}</td><td>R$ {{ b.value }}</td><td>{{
+              b.bid_date }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <div class="content">
+      <h3 style="color: red;">Finalizado</h3>
+      {% if current_bid %}
+      <div class="price">Lance vencedor: R${{ current_bid }}</div>
+      {% else %}
+      <div class="price" style="margin-top: 10px;">Finalizado sem Lances</div>
+      {% endif %}
+      <hr style="margin: 16px 0; opacity: .3;">
+      <h4 style="margin-top:16px">Histórico de lances</h4>
+      <table class="table">
+        <thead><tr><th>Usuário</th><th>Valor</th><th>Data</th></tr></thead>
+        <tbody>
+          {% for b in bids %}
+          <tr><td>{{ b.user.name }}</td><td>R$ {{ b.value }}</td><td>{{
+              b.bid_date }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  </aside>
+</article>
+<script src="{{ url_for('static', filename='js/filters.js') }}"></script>
+<script src="{{ url_for('static', filename='js/auction_timer.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}Meus dados{% endblock %}
+
+{% block content %}
+<h1>Minha conta</h1>
+
+<h2>{{ name }} <br> {{ email }}</h2>
+
+
+<section class="kpis" style="margin-bottom:12px">
+  <div class="kpi">
+        <div class="price">
+            <a href="{{ url_for('perfil.perfil') }}" style="color: inherit; text-decoration: none;">Histórico Lances/Transações</a>
+        </div>
+    </div>
+  <div class="kpi"><div class="muted">Lances ativos</div><div class="price">{{
+      active_bids }}</div></div>
+  <div class="kpi"><div class="muted">Itens cadastrados</div><div
+      class="price"><a href="{{ url_for('items.items') }}">{{ itens
+        }}</a></div></div>
+  <div class="kpi"
+    style="display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;">
+    <div>
+      <div class="muted">Saldo</div>
+
+      <div class="price"><a href="{{ url_for('balance.balance') }}">R${{
+          balance if balance is not none else "0" }}</a></div>
+
+    </div>
+
+  </div>
+</section>
+
+<h1>Dados Pessoais</h1>
+
+<div class="grid" style="grid-template-columns:1fr 1fr">
+
+    <section class="card">
+        <div class="content">
+            <h3>Perfil</h3>
+            <form class="form" action="/update_basic_info" method="POST">
+                <label>Nome de Usuário: <strong>{{ name }}</strong></label>
+                <input name="name" placeholder="Nome de Usuário" />
+
+                <label>Email: <strong>{{ email }}</strong></label>
+
+                <input name="email" placeholder="Novo email" />
+
+                <label>Celular: <strong>{{ cel }}</strong></label>
+                <input name="cel" placeholder="Celular" />
+                {% if messages %}
+                    <p>{{ messages[0] }}</p>
+                {% endif %}
+
+                <button class="btn" type="submit">Salvar</button>
+            </form>
+
+            <br>
+            <hr style="margin: 16px 0; opacity: .3;">
+
+            <h3>Alterar senha</h3>
+
+            <form class="form" method="POST" action="/update_password">
+
+                <label>Senha atual</label>
+                <input name="current" type="password"
+                    placeholder="Senha atual" />
+
+                <label>Nova senha</label>
+                <input name="new" type="password" placeholder="Nova senha" />
+
+                <label>Confirmar nova senha</label>
+                <input name="confirm" type="password"
+                    placeholder="Confirmar nova senha" />
+                {% if messages %}
+                    {{ messages[2] }}
+                {% endif %}
+
+                <button class="btn" type="submit">Atualizar senha</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="content">
+            {% if cpf %}
+            <h3>Endereço</h3>
+            <form class="form" action="/update_address" method="POST">
+
+                <label>Tipo de Residência</label>
+                <select id="end_tipo" name="type" required>
+                    <option value selected disabled>Selecione...</option>
+                    <option value="house">Casa</option>
+                    <option value="apartment">Apartamento</option>
+                    <option value="outro">Outro</option>
+                </select>
+
+                <label>CEP</label>
+                <input id="end_cep" name="cep" placeholder="00000-000"
+                    maxlength="9"
+                    required />
+
+                <label>Rua</label>
+                <input id="end_rua" name="street" placeholder="Rua" required />
+
+                <label>Número</label>
+                <input id="end_numero" name="number" type="number"
+                    placeholder="Número"
+                    required />
+
+                <label>Bairro</label>
+                <input id="end_bairro" name="neighborhood" placeholder="Bairro"
+                    required />
+
+                <label>Cidade</label>
+                <input id="end_cidade" name="city" placeholder="Cidade"
+                    required />
+
+                <label>Estado</label>
+                <input id="end_uf" placeholder="UF" name="state" maxlength="2"
+                    required />
+
+                <label>Complemento</label>
+                <input id="end_complemento" name="complement"
+                    placeholder="Complemento" />
+
+                <button class="btn" type="submit">Salvar</button>
+            </form>
+            {% else %}
+            <div class="register-warning">
+                <h3>Concluir Cadastro ❗</h3>
+                <form class="form" action="/complete_register" method="POST">
+
+                    <label>Tipo de Residência</label>
+                    <select id="end_tipo" name="type" required>
+                        <option value selected disabled>Selecione...</option>
+                        <option value="house">Casa</option>
+                        <option value="apartment">Apartamento</option>
+                        <option value="outro">Outro</option>
+                    </select>
+                    <label>CPF</label>
+                    <input id="input_cpf" name="cpf"
+                        placeholder="000.000.000-00"
+                        required />
+
+                    <label>CEP</label>
+                    <input id="end_cep" name="cep" placeholder="00000-000"
+                        maxlength="9"
+                        required />
+
+                    <label>Rua</label>
+                    <input id="end_rua" name="street" placeholder="Rua"
+                        required />
+
+                    <label>Número</label>
+                    <input id="end_numero" name="number" type="number"
+                        placeholder="Número"
+                        required />
+
+                    <label>Bairro</label>
+                    <input id="end_bairro" name="neighborhood"
+                        placeholder="Bairro"
+                        required />
+
+                    <label>Cidade</label>
+                    <input id="end_cidade" name="city" placeholder="Cidade"
+                        required />
+
+                    <label>Estado</label>
+                    <input id="end_uf" placeholder="UF" name="state"
+                        maxlength="2"
+                        required />
+
+                    <label>Complemento</label>
+                    <input id="end_complemento" name="complement"
+                        placeholder="Complemento" />
+                    {% if messages %}
+                        {{ messages[1] }}
+                    {% endif %}
+                    <button class="btn" type="submit">Concluir Cadastro</button>
+                </form>
+            </div>
+            {% endif %}
+
+        </div>
+    </section>
+</div>
+
+<script src="{{ url_for('static', filename='js/cep_api.js') }}"></script>
+
+{% endblock %}

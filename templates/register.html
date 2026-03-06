@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Criar conta{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<form id="register-form" class="form card" style="padding:18px;max-width:640px">
+
+    <h1>Criar Conta</h1>
+
+    <label>Nome</label>
+    <input type="text" name="name" id="name" placeholder="Digite seu nome completo" required>
+    <small class="error" id="error-name"></small>
+
+    <label>Email</label>
+    <input type="email" name="email" id="email" placeholder="exemplo@email.com" required>
+    <small class="error" id="error-email"></small>
+
+    <label>Celular</label>
+    <input type="text" name="cel" id="input_celular" placeholder="(11) 99999-9999" required>
+    <small class="error" id="error-cel"></small>
+
+    <label>Senha</label>
+    <div class="password-wrapper">
+        <input type="password" id="password" name="password" placeholder="Digite uma senha" required>
+        <span class="toggle-pass" id="toggle-pass">👁</span>
+    </div>
+    <small class="error" id="error-password"></small>
+
+    <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+    <div class="strength-text" id="strength-text"></div>
+
+    <label>Confirmar senha</label>
+    <div class="password-wrapper">
+        <input type="password" id="confirm" name="confirm" placeholder="Confirme sua senha" required>
+        <span class="toggle-pass" id="toggle-confirm">👁</span>
+    </div>
+    <small class="error" id="error-confirm"></small>
+
+    <label>
+        <input type="checkbox" required>
+        Aceito os <a href="{{ url_for('page.page', page='terms') }}">termos de uso</a>
+    </label>
+
+    <button class="btn" type="submit">Criar conta</button>
+
+</form>
+
+<script src="{{ url_for('static', filename='js/register.js') }}"></script>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Categorias{% endblock %}
+
+{% block content %}
+<h1>Categorias</h1>
+<section class="grid cards">
+        {% for c in category %}
+                <article class="card"><div class="content"><h3>
+                <a href="/auctions?category={{ c.category_id }}">{{ c.name }}</a>
+                </h3></div></article>
+        {% endfor %}
+
+</section>
+{% endblock %}

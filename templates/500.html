@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Erro 500 - Erro Interno do Servidor{% endblock %}
+
+{% block content %}
+<div class="container" style="display: flex; justify-content: center; align-items: center; min-height: 70vh;">
+    <section class="card" style="padding: 40px; text-align: center; max-width: 500px; width: 100%;">
+        <div class="content">
+            <img src="{{ url_for('static', filename='images/500.png') }}" 
+                 alt="Imagem de Erro 500: Falha no Servidor de Leilão"
+                 style="max-width: 80%; height: auto; margin-bottom: 20px;">
+
+            <h1 style="font-size: 4rem; color: var(--danger); margin-bottom: 10px;">500</h1>
+            <h2 style="margin-top: 0; color: var(--danger);">Erro Interno do Servidor</h2>
+            
+            <p>
+                Algo inesperado aconteceu em nossos servidores.
+                Pedimos desculpas pelo inconveniente!
+            </p>
+            <p class="muted">
+                Nossa equipe de desenvolvimento já foi notificada sobre este problema. Por favor, 
+                tente novamente mais tarde.
+            </p>
+            
+            <p style="margin-top: 30px;">
+                <a href="/" class="btn">Voltar para a Página Inicial</a>
+            </p>
+        </div>
+    </section>
+</div>
+{% endblock %}

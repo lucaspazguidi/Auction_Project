@@ -1,0 +1,143 @@
+/* =========================
+    General style of the form
+========================= */
+.form {
+     padding: 18px;
+     max-width: 640px; /* form width */
+     margin: auto;
+     display: flex;
+     flex-direction: column;
+     gap: 10px;
+}
+
+.form h1 {
+     text-align: center;
+     margin-bottom: 12px;
+}
+
+label {
+     font-weight: bold;
+     display: block;
+}
+
+/* Fields */
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="password"] {
+     border: 2px solid #ccc;
+     border-radius: 7px;
+     padding: 10px;
+     width: 50%;
+     display: block;
+     transition: border 0.25s ease;
+}
+
+input:focus {
+     outline: none !important;
+     box-shadow: none !important;
+}
+
+/* Error messages */
+.error {
+     color: red;
+     font-size: 13px;
+     margin-top: 4px;
+     display: block;
+}
+
+/* Password wrapper */
+.password-wrapper {
+     position: relative;
+     width: 100%; /* Now equal to the fields */
+}
+.password-wrapper input {
+     width: 100%; /* Now equal to the fields */
+     padding-right: 40px;
+}
+
+/* Show password icon */
+.toggle-pass {
+     position: absolute;
+     right: 320px;               /* <-- corrected, was 320px before */
+     top: 50%;
+     transform: translateY(-50%);
+     cursor: pointer;
+     font-size: 22px;
+     user-select: none;
+}
+
+/* Password strength bar */
+.strength-bar {
+     width: 50%;
+     height: 8px;
+     background: #ddd;
+     border-radius: 5px;
+     overflow: hidden;
+     margin-top: 6px;
+}
+
+.strength-fill {
+     height: 100%;
+     width: 0%;
+     background: red; /* initial color */
+     transition: width 0.4s ease, background 0.4s ease;
+}
+
+/* Strength text */
+.strength-text {
+     text-align: left;
+     margin-top: 4px;
+     font-size: 13px;
+     font-weight: bold;
+     color: #444;
+}
+
+/* Submit button */
+button.btn {
+     padding: 15px 16px;
+     font-size: 14px;
+     cursor: pointer;
+     border-radius: 10px;
+     border: 1px solid #ccc;
+     background-color: var(--secondary);
+     color: white;
+}
+
+/* Checkbox and link */
+label.terms-label input[type="checkbox"] {
+     margin-right: 6px;
+     vertical-align: middle;
+     cursor: pointer;
+}
+
+label.terms-label a {
+     text-decoration: none;
+     color: #007BFF;
+     cursor: pointer;
+}
+
+/* Responsive adjustment for smaller screens */
+@media (max-width: 1280px) {
+     .toggle-pass {
+          right: 30px !important;  /* Touches the inner edge of the input */
+     }
+
+     .form input[type="text"],
+     .form input[type="email"],
+     .form input[type="password"],
+     .strength-bar {
+          width: 95%;  /* Inputs take the whole line on smaller screens */
+     }
+
+     .password-wrapper {
+          width: 100%;
+     }
+}
+
+.server-error {
+     color: red;
+     font-weight: normal;
+     margin-bottom: 10px;
+     font-size: 20px;
+     font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Arial, Helvetica, sans-serif;
+}

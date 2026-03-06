@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<h1>Finalizar pagamento</h1>
+<section class="grid" style="grid-template-columns:1fr 1fr">
+  <form class="form card" style="padding:18px">
+    <h3>Endereço</h3>
+    <label>CEP <input></label>
+    <label>Rua <input></label>
+    <div class="grid" style="grid-template-columns:2fr 1fr 1fr;gap:12px">
+      <label>Cidade <input></label>
+      <label>UF <input></label>
+      <label>Número <input></label>
+    </div>
+    <h3>Pagamento</h3>
+    <label>Número do cartão <input></label>
+    <div class="grid" style="grid-template-columns:2fr 1fr 1fr;gap:12px">
+      <label>Validade <input></label>
+      <label>CVV <input></label>
+      <label>Parcelas
+        <select><option>À
+            vista</option><option>2x</option><option>3x</option></select>
+      </label>
+    </div>
+    <button class="btn" type="submit">Pagar</button>
+  </form>
+  <aside class="card">
+    <div class="content">
+      <h3>Resumo</h3>
+      <ul>
+        <li>MacBook Pro 14” — R$ 8.120</li>
+        <li>Frete — R$ 49,90</li>
+      </ul>
+      <h2>Total: R$ 8.169,90</h2>
+    </div>
+  </aside>
+</section>
+{% endblock %}

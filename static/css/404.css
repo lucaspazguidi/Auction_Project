@@ -1,0 +1,47 @@
+.error-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+/* Fixed image on the left */
+.error-image {
+    width: 250px;
+    height: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+/* Content on the right */
+.error-text h1 {
+    font-size: 4rem;
+    color: var(--warn);
+    margin-bottom: 10px;
+}
+
+.error-text h2 {
+    color: var(--text);
+    margin-top: 0;
+}
+
+.error-text .buttons {
+    margin-top: 25px;
+    display: flex;
+    gap: 10px;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    .error-wrapper {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .error-image {
+        width: 60%;
+    }
+
+    .error-text .buttons {
+        justify-content: center;
+    }
+}

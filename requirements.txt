@@ -1,0 +1,10 @@
+cryptography
+flask
+sqlalchemy
+dotenv
+flask_sqlalchemy
+email_validator
+bcrypt
+datetime
+pymysql
+APScheduler

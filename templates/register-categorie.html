@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastrar Categoria{% endblock %}
+
+{% block content %}
+<h1>Cadastrar Categoria</h1>
+
+{% if user.is_admin %}
+<form action="/register_category" class="form card" style="padding:18px; max-width: 500px;" method="POST">
+
+    <label>Nome da Categoria</label>
+    <input required style="max-width: 100%;" placeholder="Ex.: Eletrônicos, Livros, Antiguidades" name="name">
+
+    {% if messages %}
+    <p style="color: green; font-weight: bold;">{{ messages[0] }}</p>
+    {% endif %}
+
+    <button class="btn" type="submit" style="margin-top: 20px;">
+        Cadastrar Categoria
+    </button>
+</form>
+{% else %}
+{% endif %}
+
+{% endblock %}

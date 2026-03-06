@@ -1,0 +1,913 @@
+/* ----------------------------------------------------
+    Base Theme Variables
+    ---------------------------------------------------- */
+:root {
+    --bg: #F8F9FA; 
+    --card: #FFFFFF; 
+    --muted: #6C757D; 
+    --text: #023827; 
+    --primary: #bd964f; 
+    --secondary: #023827; 
+    --accent: #bd964f; 
+    --highlight: #023827;
+    --danger: #EF4444;
+    --warn: #FBBF24;
+    --radius: 12px;
+    --shadow: 0 4px 16px rgba(189, 150, 79, 0.2);
+    --primary-rgb: 189, 150, 79;
+}
+
+body.theme-dark {
+    --bg: #023827;
+    --card: #011E16; 
+    --muted: #A0A0A0; 
+    --text: #E5E5E5; 
+    --primary: #bd964f; 
+    --secondary: #a88547; 
+    --accent: #bd964f;
+    --highlight: #d4b170;
+    --danger: #F43F5E;
+    --warn: #FACC15;
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.75); 
+    --primary-rgb: 189, 150, 79;
+}
+
+/* ----------------------------------------------------
+    Base Styles
+    ---------------------------------------------------- */
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: clamp(14px, 2vw, 16px);
+}
+
+a {
+    color: var(--secondary);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--primary);
+    transition: color 0.2s ease;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+p {
+    text-align: justify;
+}
+
+/* ----------------------------------------------------
+    Layout Utilities
+    ---------------------------------------------------- */
+.container {
+    width: min(1200px, 90vw);
+    margin-inline: auto;
+    padding-inline: clamp(16px, 4vw, 32px);
+}
+
+.grid {
+    display: grid;
+    gap: clamp(12px, 2vw, 16px);
+}
+
+.grid.cards {
+    grid-template-columns: repeat(auto-fill, minmax(clamp(240px, 20vw, 260px), 1fr));
+}
+
+.muted {
+    color: var(--muted);
+}
+
+/* ----------------------------------------------------
+    Header & Navigation
+    ---------------------------------------------------- */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--card);
+    border-bottom: 1px solid var(--muted);
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: clamp(12px, 3vw, 16px) 0;
+    min-width: 0;
+}
+
+.logo {
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: var(--primary);
+    font-size: clamp(1.2rem, 4vw, 1.4rem);
+    flex-shrink: 0;
+}
+
+/* Main Menu (Desktop) - MODIFIED: Ensure it is always visible */
+.nav.main-nav {
+    display: flex;
+    /* Ensure it is always visible */
+    flex-wrap: wrap;
+    flex-grow: 1;
+    flex-shrink: 1;
+    justify-content: center;
+    min-width: 0;
+}
+
+/* Mobile Menu - MODIFIED: Ensure it is always visible */
+.nav.mobile-nav {
+    display: flex;
+    /* Ensure it is always visible */
+}
+
+.nav a {
+    margin: 0 clamp(8px, 2vw, 8px);
+    color: var(--text);
+    font-weight: 500;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+
+}
+
+.nav a:hover {
+    color: var(--primary);
+}
+
+.header-actions {
+    display: flex;
+    gap: clamp(8px, 2vw, 12px);
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.auth-actions {
+    display: flex;
+    gap: inherit;
+    flex-shrink: 0;
+    margin-right: clamp(16px, 3vw, 24px);
+}
+
+.icon-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(36px, 8vw, 38px);
+    height: clamp(36px, 8vw, 38px);
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--secondary);
+    border: 1px solid var(--muted);
+    font-size: clamp(1rem, 3vw, 1.1rem);
+    transition: background 0.2s ease;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.icon-link:hover {
+    background: var(--highlight);
+    color: white;
+}
+
+/* ----------------------------------------------------
+    Buttons
+    ---------------------------------------------------- */
+.btn {
+    display: inline-block;
+    background: var(--secondary);
+    color: white;
+    padding: clamp(8px, 2vw, 10px) clamp(14px, 3vw, 18px);
+    border-radius: 999px;
+    border: 0;
+    font-weight: 700;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    box-shadow: 0 3px 6px rgba(var(--primary-rgb), 0.3);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-a {
+    display: inline-block;
+    background: var(--secondary);
+    color: white;
+    padding: clamp(8px, 2vw, 10px) clamp(14px, 3vw, 18px);
+    border-radius: 999px;
+    border: 0;
+    font-weight: 700;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    box-shadow: 0 3px 6px rgba(var(--primary-rgb), 0.3);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn-a:hover{
+    opacity: 0.9;
+    transform: translateY(-1px);
+    color: white;
+    outline: 2px solid var(--highlight);
+}
+
+.btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    color: white;
+    outline: 2px solid var(--highlight);
+}
+
+.btn.ghost {
+    background: transparent;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    box-shadow: none;
+    cursor: pointer;
+}
+
+/* ----------------------------------------------------
+    Page Content & Cards
+    ---------------------------------------------------- */
+.page {
+    padding: clamp(32px, 8vw, 40px) 0 clamp(64px, 16vw, 80px);
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--muted);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card .cover {
+    background: #E2E8F0;
+    border-bottom: 1px solid var(--muted);
+    position: relative;
+}
+
+
+
+.card .content {
+    padding: clamp(12px, 3vw, 16px);
+}
+
+.price {
+    font-weight: 800;
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
+    color: var(--secondary);
+}
+
+.countdown {
+    font-variant-numeric: tabular-nums;
+    color: var(--primary);
+    font-weight: 700;
+    font-size: clamp(0.8rem, 2vw, 0.9rem);
+}
+
+.badge {
+    display: inline-block;
+    padding: clamp(3px, 1vw, 4px) clamp(8px, 2vw, 10px);
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--muted);
+    font-size: clamp(0.75rem, 2vw, 0.8rem);
+}
+
+/* ----------------------------------------------------
+    Forms and Inputs
+    ---------------------------------------------------- */
+.form {
+    display: grid;
+    gap: clamp(12px, 2vw, 16px);
+}
+
+.form input,
+.form textarea,
+.form select {
+    padding: clamp(12px, 3vw, 14px);
+    border-radius: 8px;
+    border: 1px solid var(--muted);
+    background: var(--card);
+    color: var(--text);
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    transition: border-color 0.2s ease;
+}
+
+.form input:focus,
+.form textarea:focus,
+.form select:focus {
+    border-color: var(--highlight);
+    outline: 2px solid var(--highlight);
+}
+
+.inline-form {
+    display: flex;
+    gap: clamp(6px, 1.5vw, 8px);
+    flex-wrap: wrap;
+}
+
+.inline-form input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    flex: 1;
+}
+
+.inline-form button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.badge.selectable {
+    cursor: pointer;
+    user-select: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: var(--bg);
+    transition: 0.2s;
+}
+
+.badge.selectable.selected {
+    background: var(--primary);
+    color: var(--text);
+}
+
+.category-select {
+    padding: 8px 12px;
+    border: 1px solid var(--muted);
+    background: var(--card);
+    color: var(--text);
+    border-radius: 8px;
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
+    cursor: pointer;
+}
+
+/* ----------------------------------------------------
+    Tables, Hero, and KPI
+    ---------------------------------------------------- */
+.hero {
+    display: grid;
+    gap: clamp(14px, 3vw, 18px);
+    grid-template-columns: 1.2fr 0.8fr;
+}
+
+.hero .panel {
+    padding: clamp(14px, 3vw, 18px);
+}
+
+.searchbar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.search-input-row {
+    display: flex;
+    flex-direction: row;
+    gap: clamp(6px, 1.5vw, 8px);
+    width: 100%;
+}
+
+.search-input-row input {
+    flex: 1;
+}
+
+
+.searchbar input {
+    flex: 1;
+    padding: clamp(10px, 2.5vw, 12px);
+    border-radius: 12px;
+    border: 1px solid var(--muted);
+    background: var(--card);
+    color: var(--text);
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(6px, 1.5vw, 8px);
+    align-items: center;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    overflow-x: auto;
+}
+
+.table th,
+.table td {
+    padding: clamp(10px, 2.5vw, 12px);
+    border-bottom: 1px solid var(--muted);
+    text-align: left;
+}
+
+.kpis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(10px, 2vw, 12px);
+}
+
+.kpi {
+    background: var(--card);
+    border: 1px solid var(--muted);
+    border-radius: var(--radius);
+    padding: clamp(12px, 3vw, 16px);
+    box-shadow: var(--shadow);
+}
+
+/* ----------------------------------------------------
+    Footer
+    ---------------------------------------------------- */
+.site-footer {
+    border-top: 1px solid var(--muted);
+    background: var(--card);
+}
+
+.footer-grid {
+    display: grid;
+    gap: clamp(12px, 2vw, 16px);
+    grid-template-columns: 2fr 1fr 1fr 2fr;
+    padding: clamp(24px, 6vw, 30px) 0;
+}
+
+.footer-grid h4 {
+    color: var(--secondary);
+    font-size: clamp(1rem, 2.5vw, 1.1rem);
+    margin-top: 0;
+}
+
+.footer-grid p,
+.site-footer small,
+.footer-grid a {
+    color: var(--muted);
+    font-size: clamp(0.85rem, 2vw, 0.9rem);
+}
+
+.footer-bottom {
+    display: flex;
+    padding: clamp(12px, 3vw, 16px) 0;
+    border-top: 1px solid var(--muted);
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+footer a:hover {
+    color: var(--highlight);
+}
+
+/* ----------------------------------------------------
+    Media Queries (Full Responsiveness)
+    ---------------------------------------------------- */
+@media (max-width: 1200px) {
+    .container {
+        width: 95vw;
+    }
+}
+
+@media (max-width: 900px) {
+    .hero {
+        grid-template-columns: 1fr;
+    }
+
+    .kpis {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .grid.cards {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    .hero .panel {
+        padding: 12px;
+    }
+
+    .kpis {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        padding-left: 10px;
+    }
+}
+
+@media (max-width: 875px) {
+    /* REMOVED: Rule to hide the desktop main menu.
+       NOW it remains visible along with the mobile menu. */
+
+    .header-inner {
+        /* The header-inner now has to handle more elements */
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .logo {
+        order: 1;
+        flex-basis: auto;
+    }
+
+    .header-actions {
+        /* Allows inner buttons to wrap into multiple lines */
+        flex: 1 1 auto;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        /* Aligns icons to the right */
+        gap: 8px;
+        order: 2;
+        /* Position 2: Occupies the right of the first line */
+    }
+
+    /* Style: Ensures Login/Register buttons expand together */
+    .auth-actions {
+        flex-basis: 100%;
+        /* Forces it to occupy the full line */
+        display: flex;
+        gap: 8px;
+        order: 3;
+        /* Position 3: Moves to the lower line */
+        margin-right: 0;
+        /* Removes extra desktop margin on mobile */
+    }
+
+    .auth-actions .btn,
+    .auth-actions .btn.ghost {
+        flex: 1 1 0;
+        /* Divides space equally between Login and Create Account */
+        text-align: center;
+        padding: 10px 14px;
+        border-radius: 8px;
+    }
+
+    /* MODIFIED: The main menu returns to display: none for narrow screens (as in the original), forcing use of the mobile menu, as per the original layout.
+       The mobile menu returns to the original "order: 4" to go to the last line. */
+    .nav.main-nav {
+        display: none;
+        /* Restores original template behavior for screens smaller than 875px */
+    }
+
+    .nav.mobile-nav {
+        flex-basis: 100%;
+        order: 4;
+        display: flex;
+        /* Ensures the mobile menu appears */
+    }
+
+    .table {
+        font-size: 0.8rem;
+    }
+
+    .btn,
+    .icon-link {
+        min-width: 44px;
+    }
+}
+
+/* ================================
+    Dropdown Menu
+    ================================ */
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    background: var(--secondary);
+    color: var(--text);
+    margin-left: 8px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    color: white;
+}
+
+.dropdown-toggle:hover {
+    opacity: 0.9;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 110%;
+    right: 0;
+    background: var(--card);
+    border: 1px solid var(--muted);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    display: none;
+    flex-direction: column;
+    min-width: 200px;
+    padding: 6px 0;
+    z-index: 20;
+
+}
+
+.dropdown-menu a {
+    padding: 10px 16px;
+    display: block;
+    color: var(--text);
+    font-weight: 500;
+}
+
+.dropdown-menu a:hover {
+    background: var(--highlight);
+    color: white;
+}
+
+.dropdown.open .dropdown-menu {
+    display: flex;
+}
+
+@media (max-width: 875px) {
+    .dropdown {
+        width: 100%;
+    }
+
+    .dropdown-menu {
+        position: static;
+        box-shadow: none;
+        border-radius: 6px;
+        background: var(--bg);
+    }
+
+    .dropdown-toggle {
+        width: 100%;
+    }
+}
+
+/* ================================
+    Infinite Scroll Table
+    ================================ */
+.table-scroll-container {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+    border-radius: 6px;
+    background: var(--card);
+}
+
+/* Table occupies full width */
+.table-scroll-container table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Forces aligned columns */
+}
+
+/* Sticky header */
+.table-scroll-container thead tr {
+    position: sticky;
+    top: 0;
+    background: var(--card);
+    z-index: 1;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.1);
+}
+
+/* Organized cells */
+.table-scroll-container th,
+.table-scroll-container td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    word-wrap: break-word; /* Prevents ugly breaks */
+}
+
+/* Improves rows appearance */
+.table-scroll-container tbody tr:nth-child(even) {
+    background: rgba(0,0,0,0.03);
+}
+
+
+.list-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Header */
+.list-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr; /* Adjust column proportions */
+    background: var(--card);
+    padding: 10px;
+    font-weight: bold;
+    border-bottom: 2px solid #ccc;
+    position: sticky;
+    top: 0;
+}
+
+/* Scroll area */
+.list-scroll {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* Each list row */
+.list-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr; /* Same layout as header */
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    background: var(--card);
+}
+
+/* Alternating colors to organize visualization */
+.list-item:nth-child(even) {
+    background: rgba(0,0,0,0.04);
+}
+
+
+/* ================================
+    Item Description Clamping
+    ================================ */
+
+.item-description {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    font-weight: 800;
+    font-size: clamp(1rem, 3vw, 1.1rem);
+    color: var(--secondary);
+}
+
+/* ================================
+    Registration Warning Border
+    ================================ */
+
+.register-warning {
+    border: 2px solid var(--alert);
+}
+
+/* Wrapper for images in homepage cards (smaller height) */
+.card-img-wrapper {
+    width: 100%;            /* occupies full width of the card */
+    height: 200px;          /* fixed height for consistency */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 12px;    /* optional */
+    background-color: #f8f8f8; /* optional, background color */
+}
+
+.card-img-wrapper2 {
+    width: 100%;            /* occupies full width of the card */
+    height: 200px;          /* fixed height for consistency */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 12px;    /* optional */
+    background-color: #f8f8f8; /* optional, background color */
+}
+
+
+/* Image in homepage cards */
+.card-img {
+    width: 100%;            /* occupies full width of the wrapper */
+    height: 100%;           /* occupies full height of the wrapper */
+    object-fit: contain;    /* maintains aspect ratio and shows full image (no cropping) */
+    transition: transform 0.2s ease; /* smooth hover effect */
+}
+
+.card-img2 {
+    width: 100%;            /* occupies full width of the wrapper */
+    height: auto;           /* occupies full height of the wrapper */
+    object-fit: cover;    /* maintains aspect ratio and shows full image (no cropping) */
+    transition: transform 0.2s ease; /* smooth hover effect */
+}
+
+/* Optional effect: zoom image on hover (homepage cards) */
+.card-img-wrapper:hover .card-img {
+    transform: scale(1.05);
+}
+
+/* New wrapper for images in auction details page (larger height) */
+.auction-img-wrapper {
+    width: 100%;            /* occupies full width of the card */
+    height: 400px;          /* larger height for more visible image */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 12px;    /* optional */
+    background-color: #f8f8f8; /* optional, background color */
+}
+
+/* New class for image in auction details page */
+.auction-img {
+    width: 100%;            /* occupies full width of the wrapper */
+    height: 100%;           /* occupies full height of the wrapper */
+    object-fit: contain;    /* maintains aspect ratio and shows full image (no cropping) */
+    transition: transform 0.2s ease; /* smooth hover effect */
+}
+
+/* Optional effect: zoom image on hover (auction details page) */
+.auction-img-wrapper:hover .auction-img {
+    transform: scale(1.05);
+}
+
+/* Mobile adjustments (responsiveness) */
+@media (max-width: 768px) {
+    .card-img-wrapper {
+        height: 150px; /* smaller height for mobile cards */
+    }
+    .auction-img-wrapper {
+        height: 250px; /* smaller height for mobile auction details */
+    }
+}
+
+/* ===========================
+   Wrapper for images in auction cards
+   =========================== */
+.auction-card-img-wrapper {
+    width: 100%;                /* occupies full width of the card */
+    height: 220px;              /* wrapper height, adjust if needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;           /* prevents image from overflowing container */
+    border-radius: 10px;        /* rounded corners */
+    background-color: #f0f0f0;  /* background color if image doesn't fill */
+}
+
+/* Image inside the auction card wrapper */
+.auction-card-img {
+    width: 100%;                /* occupies full width of the wrapper */
+    height: 100%;               /* occupies full height of the wrapper */
+    object-fit: contain;        /* maintains image proportion without cropping */
+    transition: transform 0.25s ease; /* smooth hover effect */
+}
+
+/* Hover effect: slight zoom */
+.auction-card-img-wrapper:hover .auction-card-img {
+    transform: scale(1.05);
+}
+
+/* ===========================
+   Wrapper for large images in auction details page
+   =========================== */
+.auction-detail-img-wrapper {
+    width: 100%;                /* occupies full width of the container */
+    height: 420px;              /* larger height for emphasis */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 12px;
+    background-color: #f0f0f0;
+}
+
+/* Image inside the wrapper on the details page */
+.auction-detail-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;        /* maintains proportion */
+    transition: transform 0.25s ease;
+}
+
+/* Hover effect: slight zoom */
+.auction-detail-img-wrapper:hover .auction-detail-img {
+    transform: scale(1.05);
+}
+
+/* ===========================
+   Mobile adjustments
+   =========================== */
+@media (max-width: 768px) {
+    .auction-card-img-wrapper {
+        height: 160px;          /* smaller height for small screens */
+    }
+
+    .auction-detail-img-wrapper {
+        height: 280px;          /* smaller height for mobile */
+    }
+}
