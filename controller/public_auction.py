@@ -2,7 +2,6 @@ from flask import render_template, redirect, url_for, session, Blueprint, reques
 from models.auction import Auction
 from models.db import db
 from datetime import datetime, timezone
-from scheduler.jobs import close_auction, public_auction as open_auction
 
 public_auction_bp = Blueprint("public_auction", __name__)
 
@@ -45,15 +44,6 @@ def create_public_auction():
 
         db.session.add(new_auction)
         db.session.commit()
-
-        if new_auction.situation == "scheduled":
-
-            open_auction(new_auction.auction_id)
-            close_auction(new_auction.auction_id)
-
-        else:
-
-            close_auction(new_auction.auction_id)
 
         return redirect(url_for("home.home"))
 

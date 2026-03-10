@@ -17,14 +17,19 @@ def close_auction(auction_id):
         auction = Auction.query.get(int(auction_id))
 
         if not auction:
-                return
+            return
 
         if auction.situation != "active":
-                return
+            return
+
+        now = datetime.now(timezone.utc)
+
+        # convert database datetime to timezone aware
+        end_date = auction.end_date.replace(tzinfo=timezone.utc)
 
         # garante que só fecha quando realmente terminou
-        if auction.end_date > datetime.now(timezone.utc):
-                return
+        if end_date > now:
+            return
 
         auction.situation = "finished"
 
@@ -72,13 +77,16 @@ def check_expired_auctions():
 
         now = datetime.now(timezone.utc)
 
-        expired_auctions = Auction.query.filter(
-            Auction.situation == "active",
-            Auction.end_date < now
+        auctions = Auction.query.filter(
+            Auction.situation == "active"
         ).all()
 
-        for auction in expired_auctions:
-            close_auction(auction.auction_id)
+        for auction in auctions:
+
+            end_date = auction.end_date.replace(tzinfo=timezone.utc)
+
+            if end_date < now:
+                close_auction(auction.auction_id)
 
 
 # Function responsible for opening auctions
@@ -111,9 +119,12 @@ def check_scheduled_auctions():
         now = datetime.now(timezone.utc)
 
         auctions = Auction.query.filter(
-            Auction.situation == "scheduled",
-            Auction.start_date < now
+            Auction.situation == "scheduled"
         ).all()
 
         for auction in auctions:
-            public_auction(auction.auction_id)
+
+            start_date = auction.start_date.replace(tzinfo=timezone.utc)
+
+            if start_date < now:
+                public_auction(auction.auction_id)
