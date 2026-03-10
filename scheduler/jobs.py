@@ -5,7 +5,7 @@ from models.transaction import Transaction
 from models.db import db
 from sqlalchemy import desc
 from decimal import Decimal
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Function responsible for closing auctions
 def close_auction(auction_id):
@@ -16,14 +16,16 @@ def close_auction(auction_id):
 
         auction = Auction.query.get(int(auction_id))
 
-        # Validations
         if not auction:
-            return
+                return
 
         if auction.situation != "active":
-            return
+                return
 
-        # Close auction
+        # garante que só fecha quando realmente terminou
+        if auction.end_date > datetime.now(timezone.utc):
+                return
+
         auction.situation = "finished"
 
         # Find the highest bid (winner)
@@ -68,7 +70,7 @@ def check_expired_auctions():
 
     with app.app_context():
 
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
 
         expired_auctions = Auction.query.filter(
             Auction.situation == "active",
@@ -106,7 +108,7 @@ def check_scheduled_auctions():
 
     with app.app_context():
 
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
 
         auctions = Auction.query.filter(
             Auction.situation == "scheduled",

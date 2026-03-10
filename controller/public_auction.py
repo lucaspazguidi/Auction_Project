@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, session, Blueprint, request
 from models.auction import Auction
 from models.db import db
-from datetime import datetime
+from datetime import datetime, timezone
 from scheduler.jobs import close_auction, public_auction as open_auction
 
 public_auction_bp = Blueprint("public_auction", __name__)
@@ -20,11 +20,11 @@ def create_public_auction():
         start_date = request.form.get("start_date")
         end_date = request.form.get("end_date")
 
-        # Convertendo datas
-        st_date = datetime.strptime(start_date, "%Y-%m-%dT%H:%M")
-        en_date = datetime.strptime(end_date, "%Y-%m-%dT%H:%M")
+        # Converter datas para datetime com timezone
+        st_date = datetime.strptime(start_date, "%Y-%m-%dT%H:%M").replace(tzinfo=timezone.utc)
+        en_date = datetime.strptime(end_date, "%Y-%m-%dT%H:%M").replace(tzinfo=timezone.utc)
 
-        now = datetime.now().replace(second=0, microsecond=0)
+        now = datetime.now(timezone.utc).replace(second=0, microsecond=0)
 
         # Definir situação inicial
         if st_date > now:
@@ -32,7 +32,6 @@ def create_public_auction():
         else:
             situation = "active"
 
-        # Criar leilão
         new_auction = Auction(
             user_id=session.get("user_id"),
             item_id=item,
@@ -47,17 +46,13 @@ def create_public_auction():
         db.session.add(new_auction)
         db.session.commit()
 
-        # Se o leilão começa no futuro
         if new_auction.situation == "scheduled":
 
-            # Agenda abertura
             open_auction(new_auction.auction_id)
-
-            # Agenda fechamento
             close_auction(new_auction.auction_id)
 
         else:
-            # Apenas agenda fechamento
+
             close_auction(new_auction.auction_id)
 
         return redirect(url_for("home.home"))
