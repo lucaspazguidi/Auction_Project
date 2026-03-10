@@ -13,15 +13,16 @@
       <h1>{{ auction.item.name }}</h1>
       <h3>Descrição</h3>
       <p>{{ auction.item.description }}</p>
-  
-      </div>
     </div>
   </section>
+
   <aside class="card">
     {% if auction.situation == 'active' %}
     <div class="content">
 
-      <div class="countdown-timer" data-end-date="{{ auction.end_date }}">Termina em <span id="timer-{{ auction.auction_id }}">Calculando...</span></div>
+      <div class="countdown-timer" data-end-date="{{ auction.end_date }}">
+        Termina em <span id="timer-{{ auction.auction_id }}">Calculando...</span>
+      </div>
 
       {% if current_bid %}
       <div class="price">Lance atual: R$<span id="current-price">{{ current_bid }}</span></div>      
@@ -30,187 +31,189 @@
         Lance atual: R$<span id="current-price">0</span>
       </div>
       {% endif %}
+
       <form class="form" id="bid-form"
         action="{{ url_for('bid.bid', auction_id = auction.auction_id ) }}"
         style="margin-top:12px" method="POST">
+
         <label>Seu lance
-          <input name="value" type="number" id="bid-input" step="{{ auction.min_bid }}"
-            min="{{ auction.starting_price }}" placeholder="R$" required>
+          <input name="value" type="number" id="bid-input"
+            step="{{ auction.min_bid }}"
+            min="{{ auction.starting_price }}"
+            placeholder="R$"
+            required>
+
             {% if current_bid %}
             <h4>
-            Lance mínimo: R$<span id="min-bid">{{ current_bid + auction.min_bid }}</span>
-            <br> Incremento de: R${{ auction.min_bid }}
+              Lance mínimo: R$<span id="min-bid">{{ current_bid + auction.min_bid }}</span>
+              <br>Incremento de: R${{ auction.min_bid }}
             </h4>
             {% else %}
-           <h4>
-            Preço Inicial R$<span id="min-bid">{{ auction.starting_price }}</span>
-            <br> Incremento de: R${{ auction.min_bid }}
+            <h4>
+              Preço Inicial R$<span id="min-bid">{{ auction.starting_price }}</span>
+              <br>Incremento de: R${{ auction.min_bid }}
             </h4>
             {% endif %}
         </label>
+
         {% if session.get("logged") %}
-        {% if messages %}
-        {{ messages[0] }}
-        <a href="{{ url_for('balance.balance') }}"
-          style="font-weight: 700; font-size: clamp(0.9rem, 2.5vw, 1rem);">Recarregar
-          Saldo</a>
-        {% endif %}
-        <button class="btn" type="submit">Dar lance</button>
+          {% if messages %}
+            {{ messages[0] }}
+            <a href="{{ url_for('balance.balance') }}"
+              style="font-weight:700;font-size:clamp(0.9rem,2.5vw,1rem);">
+              Recarregar Saldo
+            </a>
+          {% endif %}
+          <button class="btn" type="submit">Dar lance</button>
         {% else %}
-        <a class="btn-a" href="{{ url_for('login.login') }}">Você precisa estar logado para dar
-          lances</a>
+          <a class="btn-a" href="{{ url_for('login.login') }}">
+            Você precisa estar logado para dar lances
+          </a>
         {% endif %}
+
         <button class="btn ghost" type="button">Adicionar à lista</button>
       </form>
-      <hr style="margin: 16px 0; opacity: .3;">
+
+      <hr style="margin:16px 0;opacity:.3;">
+
       <h4 style="margin-top:16px">Histórico de lances</h4>
+
       <table class="table">
-        <thead><tr><th>Usuário</th><th>Valor</th><th>Data</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Usuário</th>
+            <th>Valor</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+
         <tbody id="bid-history">
           {% for b in bids %}
-          <tr><td>{{ b.user.name }}</td><td>R$ {{ b.value }}</td><td>{{
-              b.bid_date }}</td></tr>
+          <tr>
+            <td>{{ b.user.name }}</td>
+            <td>R$ {{ b.value }}</td>
+            <td>{{ b.bid_date }}</td>
+          </tr>
           {% endfor %}
         </tbody>
       </table>
+
     </div>
     {% else %}
-      <div class="content">
-      <h3 style="color: red;">Finalizado</h3>
+
+    <div class="content">
+      <h3 style="color:red;">Finalizado</h3>
+
       {% if current_bid %}
       <div class="price">Lance vencedor: R${{ current_bid }}</div>
       {% else %}
-      <div class="price" style="margin-top: 10px;">Finalizado sem Lances</div>
+      <div class="price">Finalizado sem Lances</div>
       {% endif %}
-      <hr style="margin: 16px 0; opacity: .3;">
+
+      <hr style="margin:16px 0;opacity:.3;">
+
       <h4 style="margin-top:16px">Histórico de lances</h4>
+
       <table class="table">
-        <thead><tr><th>Usuário</th><th>Valor</th><th>Data</th></tr></thead>
+        <thead>
+          <tr>
+            <th>Usuário</th>
+            <th>Valor</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+
         <tbody>
           {% for b in bids %}
-          <tr><td>{{ b.user.name }}</td><td>R$ {{ b.value }}</td><td>{{
-              b.bid_date }}</td></tr>
+          <tr>
+            <td>{{ b.user.name }}</td>
+            <td>R$ {{ b.value }}</td>
+            <td>{{ b.bid_date }}</td>
+          </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
+
     {% endif %}
   </aside>
 </article>
+
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script src="{{ url_for('static', filename='js/filters.js') }}"></script>
 <script src="{{ url_for('static', filename='js/auction_timer.js') }}"></script>
+
 <script>
 
-  const socket = io();
+const socket = io();
 
-  const auctionId = "{{ auction.auction_id }}";
-  const minIncrement = "{{ auction.min_bid }}";
+const auctionId = "{{ auction.auction_id }}";
+const minIncrement = "{{ auction.min_bid }}";
 
 socket.emit("join_auction", {
-    auction_id: auctionId
+  auction_id: auctionId
 });
-
 
 socket.on("auction_time_update", function(data){
 
-    if(data.auction_id === auctionId){
+  if(data.auction_id == auctionId){
 
-        const timer = document.querySelector(".countdown-timer");
+    const timer = document.querySelector(".countdown-timer");
 
-        if(timer){
-            timer.dataset.endDate = data.end_date;
-        }
-
+    if(timer){
+      timer.dataset.endDate = data.end_date;
     }
 
+  }
+
 });
-
-
 
 socket.on("new_bid", function(data){
 
-    if(data.auction_id === auctionId){
+  if(data.auction_id == auctionId){
 
-        const priceElement = document.getElementById("current-price");
+    const priceElement = document.getElementById("current-price");
 
-        if(priceElement){
-            priceElement.innerText = data.value;
-        }
+    if(priceElement){
+      priceElement.innerText = data.value;
+    }
 
-        const minBidElement = document.getElementById("min-bid");
-        const input = document.getElementById("bid-input");
+    const minBidElement = document.getElementById("min-bid");
+    const input = document.getElementById("bid-input");
 
-        if(minBidElement){
-            const newMinBid = Number(data.value) + minIncrement;
-            minBidElement.innerText = newMinBid;
+    if(minBidElement){
 
-            if(input){
-                input.min = newMinBid;
-                input.value = newMinBid;
-            }
-        }
+      const newMinBid = Number(data.value) + Number(minIncrement);
 
-        const table = document.getElementById("bid-history");
+      minBidElement.innerText = newMinBid;
 
-        if(table){
-
-            const row = document.createElement("tr");
-
-            row.innerHTML = `
-                <td>${data.user}</td>
-                <td>R$ ${data.value}</td>
-                <td>Agora</td>
-            `;
-
-            table.prepend(row);
-        }
+      if(input){
+        input.min = newMinBid;
+        input.value = newMinBid;
+      }
 
     }
 
+    const table = document.getElementById("bid-history");
+
+    if(table){
+
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${data.user_id}</td>
+        <td>R$ ${data.value}</td>
+        <td>Agora</td>
+      `;
+
+      table.prepend(row);
+
+    }
+
+  }
+
 });
-</script>
-<script>
-
-const form = document.getElementById("bid-form");
-
-if(form){
-
-    form.addEventListener("submit", async function(e){
-
-        e.preventDefault(); // impede reload da página
-
-        const formData = new FormData(form);
-        const url = form.action;
-
-        try{
-
-            const response = await fetch(url, {
-                method: "POST",
-                body: formData
-            });
-
-            // se o backend redirecionar ou retornar erro
-            if(!response.ok){
-                alert("Erro ao enviar lance");
-                return;
-            }
-
-            // limpar campo depois do lance
-            const input = document.getElementById("bid-input");
-            if(input){
-                input.value = "";
-            }
-
-        }
-        catch(err){
-            console.error(err);
-            alert("Erro de conexão com o servidor");
-        }
-
-    });
-
-}
 
 </script>
+
 {% endblock %}
