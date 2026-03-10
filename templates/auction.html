@@ -24,22 +24,28 @@
       <div class="countdown-timer" data-end-date="{{ auction.end_date }}">Termina em <span id="timer-{{ auction.auction_id }}">Calculando...</span></div>
 
       {% if current_bid %}
-      <div class="price">Lance atual: R${{ current_bid }}</div>
+      <div class="price">Lance atual: R$<span id="current-price">{{ current_bid }}</span></div>      
       {% else %}
-      <div class="price" style="margin-top: 10px;">Sem lances</div>
+      <div class="price" style="margin-top: 10px;">
+        Lance atual: R$<span id="current-price">0</span>
+      </div>
       {% endif %}
-      <form class="form"
+      <form class="form" id="bid-form"
         action="{{ url_for('bid.bid', auction_id = auction.auction_id ) }}"
         style="margin-top:12px" method="POST">
         <label>Seu lance
-          <input name="value" type="number" step="{{ auction.min_bid }}"
+          <input name="value" type="number" id="bid-input" step="{{ auction.min_bid }}"
             min="{{ auction.starting_price }}" placeholder="R$" required>
             {% if current_bid %}
-            <h4>Lance mínimo: R${{ current_bid + auction.min_bid }}
-            <br> Incremento de: R${{ auction.min_bid }}</h4>
+            <h4>
+            Lance mínimo: R$<span id="min-bid">{{ current_bid + auction.min_bid }}</span>
+            <br> Incremento de: R${{ auction.min_bid }}
+            </h4>
             {% else %}
-            <h4>Preço Inicial R${{ auction.starting_price }}
-            <br> Incremento de: R${{ auction.min_bid }}</h4>
+           <h4>
+            Preço Inicial R$<span id="min-bid">{{ auction.starting_price }}</span>
+            <br> Incremento de: R${{ auction.min_bid }}
+            </h4>
             {% endif %}
         </label>
         {% if session.get("logged") %}
@@ -60,7 +66,7 @@
       <h4 style="margin-top:16px">Histórico de lances</h4>
       <table class="table">
         <thead><tr><th>Usuário</th><th>Valor</th><th>Data</th></tr></thead>
-        <tbody>
+        <tbody id="bid-history">
           {% for b in bids %}
           <tr><td>{{ b.user.name }}</td><td>R$ {{ b.value }}</td><td>{{
               b.bid_date }}</td></tr>
@@ -91,6 +97,120 @@
     {% endif %}
   </aside>
 </article>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script src="{{ url_for('static', filename='js/filters.js') }}"></script>
 <script src="{{ url_for('static', filename='js/auction_timer.js') }}"></script>
+<script>
+
+  const socket = io();
+
+  const auctionId = "{{ auction.auction_id }}";
+  const minIncrement = "{{ auction.min_bid }}";
+
+socket.emit("join_auction", {
+    auction_id: auctionId
+});
+
+
+socket.on("auction_time_update", function(data){
+
+    if(data.auction_id === auctionId){
+
+        const timer = document.querySelector(".countdown-timer");
+
+        if(timer){
+            timer.dataset.endDate = data.end_date;
+        }
+
+    }
+
+});
+
+
+
+socket.on("new_bid", function(data){
+
+    if(data.auction_id === auctionId){
+
+        const priceElement = document.getElementById("current-price");
+
+        if(priceElement){
+            priceElement.innerText = data.value;
+        }
+
+        const minBidElement = document.getElementById("min-bid");
+        const input = document.getElementById("bid-input");
+
+        if(minBidElement){
+            const newMinBid = Number(data.value) + minIncrement;
+            minBidElement.innerText = newMinBid;
+
+            if(input){
+                input.min = newMinBid;
+                input.value = newMinBid;
+            }
+        }
+
+        const table = document.getElementById("bid-history");
+
+        if(table){
+
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${data.user}</td>
+                <td>R$ ${data.value}</td>
+                <td>Agora</td>
+            `;
+
+            table.prepend(row);
+        }
+
+    }
+
+});
+</script>
+<script>
+
+const form = document.getElementById("bid-form");
+
+if(form){
+
+    form.addEventListener("submit", async function(e){
+
+        e.preventDefault(); // impede reload da página
+
+        const formData = new FormData(form);
+        const url = form.action;
+
+        try{
+
+            const response = await fetch(url, {
+                method: "POST",
+                body: formData
+            });
+
+            // se o backend redirecionar ou retornar erro
+            if(!response.ok){
+                alert("Erro ao enviar lance");
+                return;
+            }
+
+            // limpar campo depois do lance
+            const input = document.getElementById("bid-input");
+            if(input){
+                input.value = "";
+            }
+
+        }
+        catch(err){
+            console.error(err);
+            alert("Erro de conexão com o servidor");
+        }
+
+    });
+
+}
+
+</script>
 {% endblock %}
