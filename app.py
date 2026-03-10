@@ -11,7 +11,7 @@ from scheduler.scheduler import scheduler
 from scheduler.jobs import check_expired_auctions, check_scheduled_auctions
 from errors.errors import register_error_handlers
 from socketio_instance import socketio
-
+from sockets import auction_socket
 load_dotenv()
 
 app = Flask(__name__)
