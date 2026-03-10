@@ -5,17 +5,18 @@ from models.db import db
 from models.auction import Auction
 from sqlalchemy import desc, text
 from datetime import datetime, timedelta
-from scheduler.jobs import schedule_close
+from decimal import Decimal
+from scheduler.jobs import close_auction
 from socketio_instance import socketio
 
 bid_bp = Blueprint("bid", __name__)
+
 
 @bid_bp.route("/auction/<int:auction_id>/bid", methods=["POST"])
 def bid(auction_id):
 
     value = request.form.get("value", type=float)
 
-    # Valid field
     if not value:
         flash("Não é possível dar um lance sem valor!")
         return redirect(url_for("auction.auction", id=auction_id))
@@ -37,7 +38,6 @@ def bid(auction_id):
                 {"id": auction_id}
             )
 
-            # Buscar leilão dentro da transação
             auction = Auction.query.get(auction_id)
 
             if not auction:
@@ -50,6 +50,10 @@ def bid(auction_id):
 
             user = User.query.get(user_id)
 
+            if not user:
+                flash("Usuário não encontrado.")
+                return redirect(url_for("home.home"))
+
             min_bid = float(auction.min_bid)
 
             if user_id == auction.user_id:
@@ -57,7 +61,7 @@ def bid(auction_id):
                 return redirect(url_for("auction.auction", id=auction_id))
 
             if not user.balance:
-                flash("Saldo Insuficiente! Você tem R$0,00")
+                flash("Saldo insuficiente! Você tem R$0,00")
                 return redirect(url_for("auction.auction", id=auction_id))
 
             # Maior lance atual
@@ -67,7 +71,7 @@ def bid(auction_id):
 
             if highest_bid:
 
-                cur_bid = highest_bid.value
+                cur_bid = float(highest_bid.value)
 
                 if highest_bid.user_id == user_id:
                     flash("Você já é o lance líder!")
@@ -76,29 +80,29 @@ def bid(auction_id):
             else:
                 cur_bid = 0
 
-            # Validação do valor do lance
+            # validação do valor
             if value <= cur_bid:
                 flash("O lance deve ser maior do que o atual")
                 return redirect(url_for("auction.auction", id=auction_id))
 
             # incremento mínimo
             if min_bid != 0:
-                if (value - float(cur_bid)) % min_bid != 0:
+                if (value - cur_bid) % min_bid != 0:
                     flash(f"O incremento mínimo é de R${min_bid}")
                     return redirect(url_for("auction.auction", id=auction_id))
 
             # saldo insuficiente
-            if user.balance < value:
-                flash(f"Saldo Insuficiente! Você tem R${user.balance}")
+            if float(user.balance) < value:
+                flash(f"Saldo insuficiente! Você tem R${user.balance}")
                 return redirect(url_for("auction.auction", id=auction_id))
 
-            # devolver saldo para o usuário que perdeu o lance
+            # devolver saldo ao antigo líder
             if highest_bid:
                 old_user = User.query.get(highest_bid.user_id)
-                old_user.balance = float(old_user.balance) + float(highest_bid.value)
+                old_user.balance = Decimal(old_user.balance) + Decimal(highest_bid.value)
 
             # descontar saldo do novo lance
-            user.balance = float(user.balance) - value
+            user.balance = Decimal(user.balance) - Decimal(value)
 
             # criar novo lance
             new_bid = Bid(
@@ -109,25 +113,25 @@ def bid(auction_id):
 
             db.session.add(new_bid)
 
-        # TRANSACTION END (commit automático)
+        # TRANSACTION END
 
-        # Extensão anti-sniper
+        # anti-sniping
         if auction.end_date - datetime.now() <= timedelta(minutes=1):
 
             auction.end_date = auction.end_date + timedelta(minutes=1)
 
             db.session.commit()
 
-            schedule_close(auction)
+            close_auction(auction.auction_id)
 
-        # 🔵 EMITIR EVENTO WEBSOCKET
+        # evento websocket
         socketio.emit(
             "new_bid",
             {
                 "auction_id": auction_id,
                 "value": value,
                 "end_date": auction.end_date.isoformat(),
-                "user_id": user.name
+                "user_id": user_id
             },
             room=f"auction_{auction_id}"
         )
